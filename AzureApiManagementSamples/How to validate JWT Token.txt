@@ -1,0 +1,30 @@
+﻿*** Validate JWT Token using Azure AD v2 (Azure Api Management) ***
+
+1. Register Api Proxy
+2. Register Client App to fetch the token
+
+3. In the API Management Portal, select either Products/Api/Common Operations and add 
+   Validate JWT Policy in the Inbound Flow
+
+4. Insert the following data as for required fields:
+ - Header name. eg: Authorization
+ - Scheme name. eg: Bearer
+ - Issuers. (This is the issuer of the Client App that invokes the Api Proxy token endpoint)
+ - Required claims. (Validation part, you can put whatever claims needed to perform validation)
+ - Open Id Connect Url. (Metadata endpoint of Client App)
+
+5. Sample Validate JWT Policy:
+   <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized" require-scheme="Bearer">
+            <openid-config url="https://login.microsoftonline.com/eb9925dd-728d-4b14-8d95-04af41b37dd4/v2.0/.well-known/openid-configuration" />
+            <issuers>
+                <issuer>https://sts.windows.net/eb9925dd-728d-4b14-8d95-04af41b37dd4/</issuer>
+            </issuers>
+            <required-claims>
+                <claim name="aud" match="any">
+                    <value>api://core</value>
+                </claim>
+                <claim name="roles" match="any">
+                    <value>Reader</value>
+                </claim>
+            </required-claims>
+     </validate-jwt>
