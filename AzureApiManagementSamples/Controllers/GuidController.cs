@@ -15,6 +15,7 @@ namespace AzureApiManagementSamples.Controllers
         [ProducesResponseType(200)]
         public IActionResult Get() => Ok(new
         {
+            version = "1.0",
             data = new string[]
             {
                 Guid.NewGuid().ToString(),
